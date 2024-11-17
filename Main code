@@ -1,0 +1,234 @@
+
+CREATE TABLE categories (
+	id_category int4 NOT NULL,
+	"name" varchar(50) NOT NULL,
+	CONSTRAINT categories_pk PRIMARY KEY (id_category)
+);
+
+
+-- "Autoschool".experiences определение
+
+-- Drop table
+
+-- DROP TABLE experiences;
+
+CREATE TABLE experiences (
+	id_experience int4 NOT NULL,
+	"year" int4 NULL,
+	date_of_start date NULL,
+	CONSTRAINT experiences_pk PRIMARY KEY (id_experience)
+);
+
+
+-- "Autoschool".payment_methods определение
+
+-- Drop table
+
+-- DROP TABLE payment_methods;
+
+CREATE TABLE payment_methods (
+	id_method int4 NOT NULL,
+	method_name varchar(50) NULL,
+	CONSTRAINT payment_methods_pk PRIMARY KEY (id_method)
+);
+
+
+-- "Autoschool".payment_statuses определение
+
+-- Drop table
+
+-- DROP TABLE payment_statuses;
+
+CREATE TABLE payment_statuses (
+	id_payment_status int4 NOT NULL,
+	"name" varchar(50) NULL,
+	CONSTRAINT payment_statuses_pk PRIMARY KEY (id_payment_status)
+);
+
+
+-- "Autoschool".student_statuses определение
+
+-- Drop table
+
+-- DROP TABLE student_statuses;
+
+CREATE TABLE student_statuses (
+	id_status int4 NOT NULL,
+	"name" varchar NOT NULL,
+	CONSTRAINT student_statuses_pk PRIMARY KEY (id_status)
+);
+
+
+-- "Autoschool".vehicle_types определение
+
+-- Drop table
+
+-- DROP TABLE vehicle_types;
+
+CREATE TABLE vehicle_types (
+	id_vehicle_type int4 NOT NULL,
+	type_name varchar(50) NOT NULL,
+	CONSTRAINT vehicle_types_pk PRIMARY KEY (id_vehicle_type)
+);
+
+
+-- "Autoschool".instructors определение
+
+-- Drop table
+
+-- DROP TABLE instructors;
+
+CREATE TABLE instructors (
+	id_instructor int4 NOT NULL,
+	first_name varchar(50) NULL,
+	last_name varchar(50) NULL,
+	middle_name varchar(50) NULL,
+	phone varchar(12) NULL,
+	email varchar(100) NULL,
+	id_experience int4 NULL,
+	CONSTRAINT instructors_pk PRIMARY KEY (id_instructor),
+	CONSTRAINT instructors_experience_fk FOREIGN KEY (id_experience) REFERENCES experiences(id_experience)
+);
+
+
+-- "Autoschool".vehicles определение
+
+-- Drop table
+
+-- DROP TABLE vehicles;
+
+CREATE TABLE vehicles (
+	id_vehicle int4 NOT NULL,
+	vehicle_type int4 NOT NULL,
+	vehicle_model varchar(100) NOT NULL,
+	registration_number varchar(20) NOT NULL,
+	CONSTRAINT vehicles_pk PRIMARY KEY (id_vehicle),
+	CONSTRAINT vehicles_type_fk FOREIGN KEY (vehicle_type) REFERENCES vehicle_types(id_vehicle_type)
+);
+
+
+-- "Autoschool"."groups" определение
+
+-- Drop table
+
+-- DROP TABLE "groups";
+
+CREATE TABLE "groups" (
+	id_group serial4 NOT NULL,
+	group_name varchar(100) NOT NULL,
+	id_instructor int4 NOT NULL,
+	CONSTRAINT groups_pkey PRIMARY KEY (id_group),
+	CONSTRAINT groups_instructors_fk FOREIGN KEY (id_instructor) REFERENCES instructors(id_instructor)
+);
+
+
+-- "Autoschool".instructor_categories определение
+
+-- Drop table
+
+-- DROP TABLE instructor_categories;
+
+CREATE TABLE instructor_categories (
+	id_instructor int4 NOT NULL,
+	id_category int4 NOT NULL,
+	CONSTRAINT instructor_categories_pk PRIMARY KEY (id_instructor, id_category),
+	CONSTRAINT instructor_categories_categories_fk FOREIGN KEY (id_category) REFERENCES categories(id_category),
+	CONSTRAINT instructor_categories_instructors_fk FOREIGN KEY (id_instructor) REFERENCES instructors(id_instructor)
+);
+
+
+-- "Autoschool".schedules определение
+
+-- Drop table
+
+-- DROP TABLE schedules;
+
+CREATE TABLE schedules (
+	id_schedule serial4 NOT NULL,
+	id_group int4 NOT NULL,
+	lesson_date date NOT NULL,
+	lesson_time time NOT NULL,
+	lesson_duration interval NOT NULL,
+	CONSTRAINT schedules_pkey PRIMARY KEY (id_schedule),
+	CONSTRAINT schedules_groups_fk FOREIGN KEY (id_group) REFERENCES "groups"(id_group)
+);
+
+
+-- "Autoschool".students определение
+
+-- Drop table
+
+-- DROP TABLE students;
+
+CREATE TABLE students (
+	id_student int4 NOT NULL,
+	first_name varchar(50) NOT NULL,
+	middle_name varchar(50) NOT NULL,
+	last_name varchar(50) NOT NULL,
+	birth_date date NOT NULL,
+	phone varchar(12) NOT NULL,
+	email varchar(100) NOT NULL,
+	address varchar(100) NOT NULL,
+	id_statuses int4 NOT NULL,
+	id_instructor int4 NULL,
+	id_category int4 NULL,
+	id_vehicle int4 NULL,
+	CONSTRAINT students_pk PRIMARY KEY (id_student),
+	CONSTRAINT students_category_fk FOREIGN KEY (id_category) REFERENCES categories(id_category),
+	CONSTRAINT students_instructors_fk FOREIGN KEY (id_instructor) REFERENCES instructors(id_instructor),
+	CONSTRAINT students_statuses_fk FOREIGN KEY (id_statuses) REFERENCES student_statuses(id_status),
+	CONSTRAINT students_vehicle_fk FOREIGN KEY (id_vehicle) REFERENCES vehicles(id_vehicle)
+);
+
+
+-- "Autoschool".payments определение
+
+-- Drop table
+
+-- DROP TABLE payments;
+
+CREATE TABLE payments (
+	id_payment int4 NOT NULL,
+	id_student int4 NULL,
+	payment_date date NULL,
+	amount numeric NULL,
+	id_method int4 NULL,
+	id_payment_status int4 NULL,
+	CONSTRAINT payments_pk PRIMARY KEY (id_payment),
+	CONSTRAINT payments_method_fk FOREIGN KEY (id_method) REFERENCES payment_methods(id_method),
+	CONSTRAINT payments_status_fk FOREIGN KEY (id_payment_status) REFERENCES payment_statuses(id_payment_status),
+	CONSTRAINT payments_students_fk FOREIGN KEY (id_student) REFERENCES students(id_student)
+);
+
+
+-- "Autoschool".student_attendance определение
+
+-- Drop table
+
+-- DROP TABLE student_attendance;
+
+CREATE TABLE student_attendance (
+	id_student int4 NOT NULL,
+	id_schedule int4 NOT NULL,
+	attendance_status varchar(20) NOT NULL,
+	CONSTRAINT student_attendance_pk PRIMARY KEY (id_student, id_schedule),
+	CONSTRAINT student_attendance_schedules_fk FOREIGN KEY (id_schedule) REFERENCES schedules(id_schedule),
+	CONSTRAINT student_attendance_students_fk FOREIGN KEY (id_student) REFERENCES students(id_student)
+);
+
+
+-- "Autoschool".student_groups определение
+
+-- Drop table
+
+-- DROP TABLE student_groups;
+
+CREATE TABLE student_groups (
+	id_student int4 NOT NULL,
+	id_group int4 NOT NULL,
+	group_start_date date NOT NULL,
+	group_end_date date NULL,
+	CONSTRAINT student_groups_pk PRIMARY KEY (id_student, id_group),
+	CONSTRAINT student_groups_groups_fk FOREIGN KEY (id_group) REFERENCES "groups"(id_group),
+	CONSTRAINT student_groups_students_fk FOREIGN KEY (id_student) REFERENCES students(id_student)
+);
