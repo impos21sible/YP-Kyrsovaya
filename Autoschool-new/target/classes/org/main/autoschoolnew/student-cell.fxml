@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<HBox spacing="10.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.main.autoschoolnew.controllers.ListCellController">
+    <children>
+        <Label fx:id="LabelName" text="Имя Фамилия" />
+        <Label fx:id="LabelInstructor" text="Инструктор" />
+        <Label fx:id="LabelCar" text="Автомобиль" />
+        <Label fx:id="LabelCategory" text="Категория" />
+    </children>
+</HBox>

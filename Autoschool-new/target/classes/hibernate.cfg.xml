@@ -17,5 +17,13 @@
         <!-- <property name = "hibernate.hbm2ddl.auto">create</property> -->
 
         <mapping class="org.main.autoschoolnew.models.Instructor" />
+        <mapping class="org.main.autoschoolnew.models.Student"/>
+        <mapping class="org.main.autoschoolnew.models.Category"/>
+        <mapping class="org.main.autoschoolnew.models.Experience"/>
+        <mapping class="org.main.autoschoolnew.models.PaymentMethod"/>
+        <mapping class="org.main.autoschoolnew.models.PaymentStatus"/>
+        <mapping class="org.main.autoschoolnew.models.StudentStatus"/>
+        <mapping class="org.main.autoschoolnew.models.Vehicle"/>
+        <mapping class="org.main.autoschoolnew.models.VehicleType"/>
     </session-factory>
 </hibernate-configuration>

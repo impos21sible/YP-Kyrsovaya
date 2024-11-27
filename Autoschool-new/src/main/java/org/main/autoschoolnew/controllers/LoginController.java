@@ -120,15 +120,22 @@ public class LoginController implements Initializable {
         System.out.println(Manager.currentInstructor);
         Manager.mainStage.hide();
         Stage newWindow = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(Autoschool.class.getResource("main-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/main/autoschoolnew/main-view.fxml"));
+
+
+
         Scene scene = null;
+
         try {
             scene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        scene.getStylesheets().add("base-styles.css");
         newWindow.setTitle("Вы вошли как " + Manager.currentInstructor.getFirstName());
         newWindow.setScene(scene);
+        newWindow.setWidth(1000);   // Width of the window
+        newWindow.setHeight(600);  // Height of the window
         newWindow.setOnCloseRequest(e -> {
             Manager.mainStage.show();
         });
